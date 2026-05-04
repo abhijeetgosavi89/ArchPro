@@ -1,0 +1,30 @@
+
+> arch-pro@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\StepronTech138\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\StepronTech138\Pictures\AcrhPro\arch-pro\package-lock.json
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 9.5s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ThemeProvider.tsx:5:41
+Type error: Cannot find module 'next-themes/dist/types' or its corresponding type declarations.
+
+[0m [90m 3 |[39m
+ [90m 4 |[39m [36mimport[39m { [33mThemeProvider[39m [36mas[39m [33mNextThemesProvider[39m } [36mfrom[39m [32m"next-themes"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { type [33mThemeProviderProps[39m } [36mfrom[39m [32m"next-themes/dist/types"[39m[33m;[39m
+ [90m   |[39m                                         [31m[1m^[22m[39m
+ [90m 6 |[39m
+ [90m 7 |[39m [36mexport[39m [36mfunction[39m [33mThemeProvider[39m({ children[33m,[39m [33m...[39mprops }[33m:[39m [33mThemeProviderProps[39m) {
+ [90m 8 |[39m     [36mreturn[39m [33m<[39m[33mNextThemesProvider[39m {[33m...[39mprops}[33m>[39m{children}[33m<[39m[33m/[39m[33mNextThemesProvider[39m[33m>[39m[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

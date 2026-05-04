@@ -1,0 +1,274 @@
+// This is the Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // Optional for OAuth users
+  role          String    @default("USER") // ADMIN, USER
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  wishlist      Wishlist[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? 
+  access_token       String? 
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? 
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  planNumber  String   @unique
+  title       String
+  description String
+  width       Float?
+  depth       Float?
+  height      Float?
+  sqFt        Int
+  // Area breakdown
+  sqFtHeated  Int?     // Main heated living area
+  sqFtMain    Int?     // Main floor sq ft
+  sqFtUpper   Int?     // Upper floor sq ft
+  sqFtLower   Int?     // Lower/basement sq ft  
+  sqFtGarage  Int?     // Garage sq ft
+  sqFtPorch   Int?     // Covered porch sq ft
+  sqFtBonus   Int?     // Bonus room sq ft
+  beds        Int
+  baths       Float
+  halfBaths   Int      @default(0)
+  stories     Int
+  garage      Int
+  price       Decimal
+  // Optional upgrade pricing
+  priceReverse Decimal? // Price for reversed/mirrored plans
+  priceCAD     Decimal? // Price for CAD files
+  pricePDF     Decimal? // Price for PDF files
+
+  isTrending  Boolean @default(false)
+  isNewPlan   Boolean @default(false)
+  style       String?
+  
+  views       Int      @default(0)
+  rating      Float?
+  reviewCount Int      @default(0)
+  
+  // Foundation
+  foundationTypes String? // comma-separated: Slab,Crawlspace,Basement
+  
+  // Roof
+  roofPitch   String?
+  roofType    String? // Hip, Gable, Metal, etc.
+  
+  // Construction  
+  exteriorWall   String? // 2x4, 2x6, SIP panels, etc.
+  framingType    String? // Platform, Post & Beam, etc.
+  
+  // Sweet Home 3D Integration Fields
+  sh3dFileUrl    String?   // URL to uploaded .sh3d file
+  floorPlanUrl   String?   // URL to 2D floor plan image (for tracing)
+  aiEngine       String?   // AI engine preference: 'gemini' or 'roomsgpt'
+
+  images      Image[]
+  specs       Specification[]
+  sections    PlanSection[]
+  tags        Tag[] 
+  history     PlanHistory[]
+  orderItems  OrderItem[]
+  attributes  PlanAttribute[]
+  reviews     Review[]
+  wishlistedBy Wishlist[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Image {
+  id          String   @id @default(cuid())
+  url         String
+  altText     String?
+  isPrimary   Boolean  @default(false)
+  planId      String
+  plan        Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  // Carousel Fields
+  title       String?
+  description String?
+  order       Int      @default(0)
+  type        String   @default("IMAGE") // IMAGE, BLUEPRINT, 360_VIEW, 3D_MODEL, PDF, GLB, GLTF
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Int
+  title     String?
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, planId])
+}
+
+model AttributeCategory {
+  id      String           @id @default(cuid())
+  name    String           @unique // e.g., "Architectural Style", "Foundation", "Exterior Wall"
+  slug    String           @unique
+  values  AttributeValue[]
+}
+
+model AttributeValue {
+  id         String            @id @default(cuid())
+  value      String            // e.g., "Modern", "Slab"
+  categoryId String
+  category   AttributeCategory @relation(fields: [categoryId], references: [id])
+  plans      PlanAttribute[]
+}
+
+model PlanAttribute {
+  planId          String
+  plan            Plan           @relation(fields: [planId], references: [id])
+  attributeValueId String
+  attributeValue  AttributeValue @relation(fields: [attributeValueId], references: [id])
+
+  @@id([planId, attributeValueId])
+}
+
+model PlanHistory {
+  id          String   @id @default(cuid())
+  planId      String
+  plan        Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  action      String
+  field       String?
+  oldValue    String?
+  newValue    String?
+  userId      String?
+  userEmail   String?
+  createdAt   DateTime @default(now())
+}
+
+model Specification {
+  id       String @id @default(cuid())
+  category String @default("General") // e.g., "Dimensions", "Roof", "Foundation", "Area"
+  label    String
+  value    String
+  order    Int    @default(0)
+  planId   String
+  plan     Plan   @relation(fields: [planId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  slug  String @unique @default("")
+  plans Plan[]
+}
+
+model PlanSection {
+  id       String  @id @default(cuid())
+  planId   String
+  plan     Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  title    String?
+  content  String
+  imageUrl String?
+  order    Int     @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  status        String      @default("PENDING") // PENDING, COMPLETED, CANCELLED
+  total         Decimal
+  customerEmail String
+  customerName  String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  items         OrderItem[]
+  events        OrderEvent[]
+}
+
+model OrderEvent {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status      String   // e.g., "ORDER_PLACED", "PAYMENT_RECEIVED", "PLANS_SENT"
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model OrderItem {
+  id      String  @id @default(cuid())
+  orderId String
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  planId  String
+  plan    Plan    @relation(fields: [planId], references: [id])
+  price   Decimal
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  views     Int      @default(0)
+  sales     Int      @default(0)
+  revenue   Decimal  @default(0)
+}

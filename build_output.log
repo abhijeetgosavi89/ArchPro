@@ -1,0 +1,110 @@
+﻿
+> arch-pro@0.1.0 build
+> next build
+
+npm : ΓÜá Warning: Next.js inferred your 
+workspace root, but it may not be 
+correct.
+At line:1 char:1
++ npm run build 2>&1 | Out-File 
+-FilePath build_output.log -Encoding ut 
+...
++ ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifi 
+   ed: (ΓÜá Warning: Ne...not be correc  
+  t.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComm 
+   andError
+ 
+ We detected multiple lockfiles and 
+selected the directory of C:\Users\Stepro
+nTech138\package-lock.json as the root 
+directory.
+ To silence this warning, set 
+`turbopack.root` in your Next.js config, 
+or consider removing one of the 
+lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-re
+ference/config/next-config-js/turbopack#r
+oot-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\StepronTech138\Pictures\Acr
+hPro\arch-pro\package-lock.json
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 10.5s
+  Skipping validation of types
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/31) ...
+ΓÜá metadataBase property in metadata 
+export is not set for resolving social 
+open graph or twitter images, using 
+"http://localhost:3000". See https://next
+js.org/docs/app/api-reference/functions/g
+enerate-metadata#metadatabase
+ΓÜá metadataBase property in metadata 
+export is not set for resolving social 
+open graph or twitter images, using 
+"http://localhost:3000". See https://next
+js.org/docs/app/api-reference/functions/g
+enerate-metadata#metadatabase
+  Generating static pages using 15 workers (7/31) 
+ReferenceError: location is not defined
+    at f (C:\Users\StepronTech138\Picture
+s\AcrhPro\arch-pro\.next\server\chunks\ss
+r\Pictures_AcrhPro_arch-pro_src_app_check
+out_page_tsx_d1143234._.js:1:232)
+  Generating static pages using 15 workers (15/31) 
+  Generating static pages using 15 workers (23/31) 
+Γ£ô Generating static pages using 15 workers (31/31) in 996.1ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî ╞Æ /
+Γö£ Γùï /_not-found
+Γö£ Γùï /admin
+Γö£ Γùï /admin/attributes
+Γö£ Γùï /admin/orders
+Γö£ Γùï /admin/plans
+Γö£ ╞Æ /admin/plans/[id]
+Γö£ Γùï /admin/plans/import
+Γö£ Γùï /admin/plans/new
+Γö£ Γùï /admin/users
+Γö£ ╞Æ /api/admin/analytics
+Γö£ ╞Æ /api/admin/attributes
+Γö£ ╞Æ /api/admin/attributes/categories
+Γö£ ╞Æ /api/admin/attributes/values
+Γö£ ╞Æ /api/admin/attributes/values/[id]
+Γö£ ╞Æ /api/admin/orders
+Γö£ ╞Æ /api/admin/plans/import
+Γö£ ╞Æ /api/admin/users
+Γö£ ╞Æ /api/auth/[...nextauth]
+Γö£ ╞Æ /api/media/[id]
+Γö£ ╞Æ /api/orders
+Γö£ ╞Æ /api/plans
+Γö£ ╞Æ /api/plans/[id]
+Γö£ ╞Æ /api/plans/[id]/media
+Γö£ ╞Æ /api/plans/[id]/reviews
+Γö£ ╞Æ /api/register
+Γö£ ╞Æ /api/search
+Γö£ ╞Æ /api/upload
+Γö£ ╞Æ /api/wishlist
+Γö£ ╞Æ /api/wishlist/[planId]
+Γö£ Γùï /auth/register
+Γö£ Γùï /auth/signin
+Γö£ Γùï /cart
+Γö£ Γùï /checkout
+Γö£ Γùï /compare
+Γö£ Γùï /downloads
+Γö£ Γùï /login
+Γö£ ╞Æ /plans
+Γö£ ╞Æ /plans/[id]
+Γöö Γùï /wishlist
+
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
